@@ -1,5 +1,6 @@
 import cats.data.NonEmptyList
-import mypkg.demo.{Demo, NonEmpty}
+import com.google.protobuf.InvalidProtocolBufferException
+import mypkg.demo._
 import mypkg.PositiveInt
 
 class Spec extends munit.FunSuite {
@@ -20,9 +21,22 @@ class Spec extends munit.FunSuite {
       intercept[IllegalArgumentException](Demo(atLeast4 = Some(-3))).getMessage
         .contains("Demo.at_least_4: -3 must be greater than or equal to 4")
     )
+
+    val demo2 = Demo2(atLeast4 = Some(-3))
+    val invalidBytes = demo2.toByteArray
+    assert(
+      intercept[IllegalArgumentException](Demo.parseFrom(invalidBytes)).getMessage
+        .contains("Demo.at_least_4: -3 must be greater than or equal to 4")
+    )
   }
 
   test("Cat Types") {
     val m = NonEmpty(demos = NonEmptyList.of(Demo(Some(PositiveInt(5)))))
+    val m2 = NonEmpty2(demos = Seq.empty)
+    val invalidBytes = m2.toByteArray
+    assert(
+      intercept[InvalidProtocolBufferException](NonEmpty.parseFrom(invalidBytes)).getMessage
+        .contains("NonEmptyList must be non-empty")
+    )
   }
 }
