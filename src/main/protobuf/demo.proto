@@ -12,3 +12,11 @@ message Demo {
 message NonEmpty {
     repeated Demo demos = 1 [(validate.rules).repeated.min_items = 1];
 }
+
+message Unique {
+    repeated int32 values = 1 [(validate.rules).repeated.unique = true];
+}
+
+message Unique2 {
+    repeated int32 values = 1;
+}

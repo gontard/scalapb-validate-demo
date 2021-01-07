@@ -1,5 +1,5 @@
 import cats.data.NonEmptyList
-import mypkg.demo.{Demo, NonEmpty}
+import mypkg.demo._
 import mypkg.PositiveInt
 
 class Spec extends munit.FunSuite {
@@ -24,5 +24,12 @@ class Spec extends munit.FunSuite {
 
   test("Cat Types") {
     val m = NonEmpty(demos = NonEmptyList.of(Demo(Some(PositiveInt(5)))))
+  }
+
+  test("Unique") {
+    val m2 = Unique2(values = Seq(1, 2, 2, 3))
+    val invalidBytes = m2.toByteArray
+
+    assert(Unique.parseFrom(invalidBytes) == Unique(values = Set(1, 2, 3)))
   }
 }
