@@ -2,7 +2,13 @@ syntax = "proto2";
 
 package mypkg;
 
+import "scalapb/validate.proto";
 import "validate/validate.proto";
+import "scalapb/scalapb.proto";
+
+option (scalapb.options) = {
+    preprocessors: ["-scalapb-validate-preprocessor"]
+};
 
 message Demo {
     optional int32 positive_int = 1 [(validate.rules).int32 = { gt: 0}];
